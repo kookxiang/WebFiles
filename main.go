@@ -73,6 +73,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	if stat, err := os.Stat(targetFile); err != nil {
 		if filePath == "App.js" {
 			if _, err = os.Stat("assets/public/app.js"); err == nil {
+				w.Header().Set("Cache-Control", "nocache")
 				http.ServeFile(w, r, "assets/public/app.js")
 			} else {
 				w.WriteHeader(200)
@@ -92,17 +93,20 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 			data := generateDirectoryMetadata(targetFile)
 			if jsonData, marshalErr := json.Marshal(data); marshalErr != nil {
 				w.WriteHeader(http.StatusInternalServerError)
+				w.Header().Set("Cache-Control", "nocache")
 				w.Header().Set("Content-Type", "text/plain")
 				_, _ = w.Write([]byte(marshalErr.Error()))
 				return
 			} else {
 				w.WriteHeader(http.StatusOK)
+				w.Header().Set("Cache-Control", "nocache")
 				w.Header().Set("Content-Type", "application/json")
 				_, _ = w.Write(jsonData)
 			}
 		} else {
 			w.WriteHeader(200)
 			w.Header().Set("Content-Type", "text/html")
+			w.Header().Set("Cache-Control", "nocache")
 			_, _ = w.Write([]byte(renderDirectoryIndex(*basePath)))
 			return
 		}

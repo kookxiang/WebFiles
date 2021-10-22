@@ -47,7 +47,11 @@
     <Breadcrumb {path} on:navigate />
     <!-- <Toolbar /> -->
     <div class="file-list">
-        <div class="file-header" />
+        <div class="file-header">
+            <div class="name">文件名</div>
+            <div class="size">大小</div>
+            <div class="modify-time">修改时间</div>
+        </div>
         {#each files as file}
             <div
                 on:click={() => onPreviewFile(file)}
@@ -83,6 +87,36 @@
         font-size: 14px;
     }
 
+    .file-header {
+        display: flex;
+        padding-left: 36px;
+        margin: 16px auto 8px;
+    }
+
+    .file-header > * {
+        padding: 10px;
+        cursor: pointer;
+        transition: all .2s ease-out;
+    }
+
+    .file-header > *:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .file-header .name {
+        flex: 1;
+    }
+
+    .file-header .size {
+        width: 60px;
+        text-align: center;
+    }
+
+    .file-header .modify-time {
+        width: 100px;
+        text-align: center;
+    }
+
     .file-item {
         display: flex;
         border: 1px solid transparent;
@@ -114,7 +148,7 @@
 
     .file-item > .size {
         width: 80px;
-        text-align: right;
+        text-align: center;
     }
 
     .file-item > .modify-time {
