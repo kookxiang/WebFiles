@@ -36,7 +36,7 @@
             return;
         } else {
             const el = document.createElement("a");
-            el.href = target;
+            el.href = file.name;
             el.download = file.name;
             el.click();
         }
