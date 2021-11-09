@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 )
 
 var (
@@ -48,6 +49,7 @@ func main() {
 
 	fmt.Println("Start HTTP Server at", serverAddr)
 	fmt.Println("Root:", baseDir)
+	fmt.Println()
 
 	http.HandleFunc("/", handleRequest)
 
@@ -90,6 +92,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusTemporaryRedirect)
 			return
 		} else if strings.Contains(r.Header.Get("Accept"), "json") {
+			fmt.Printf("[%s] %s /%s\n", time.Now().Format("2006-01-02 15:04:05"), r.Method, filePath)
 			data := generateDirectoryMetadata(targetFile)
 			if jsonData, marshalErr := json.Marshal(data); marshalErr != nil {
 				w.WriteHeader(http.StatusInternalServerError)
@@ -111,6 +114,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
+		fmt.Printf("[%s] %s /%s\n", time.Now().Format("2006-01-02 15:04:05"), r.Method, filePath)
 		http.ServeFile(w, r, targetFile)
 		return
 	}
